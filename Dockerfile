@@ -103,7 +103,7 @@ RUN if [ "$type" = "full" ]; then set -ex \
       && chmod a+x /usr/bin/systemctl \
       && curl -o /usr/lib/ssl/cert.pem -sL https://curl.se/ca/cacert.pem \
       && curl -o /tmp/pear.phar -sL https://raw.githubusercontent.com/pear/pearweb_phars/master/install-pear-nozlib.phar \
-      && php /tmp/pear.phar && sudo rm -f /tmp/pear.phar \
+      && php /tmp/pear.phar && rm -f /tmp/pear.phar \
       && apt-get install -y --no-install-recommends autoconf automake gcc g++ git \
       && rm -rf /var/lib/apt/lists/* \
       && { [ -z "$savedAptMark" ] || apt-mark manual $savedAptMark > /dev/null; } \
