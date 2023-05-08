@@ -1,4 +1,4 @@
-FROM summerwind/actions-runner:v2.303.0-ubuntu-22.04
+FROM summerwind/actions-runner:ubuntu-22.04
 
 # SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
