@@ -51,7 +51,10 @@ RUN ARCH= && MULTILIB= && PREFIX='www' && URLPATH='dist' && dpkgArch="$(dpkg --p
   # smoke tests
   && node --version \
   && npm --version \
-  && spc -V
+  && spc -V \
+  # fix: publish firebase hosting
+  && chown -R runner:runner "/home/runner/.npm"
+
 
 RUN set -ex \
   && savedAptMark="$(apt-mark showmanual)" \
