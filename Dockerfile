@@ -51,6 +51,7 @@ RUN ARCH= && MULTILIB= && PREFIX='www' && URLPATH='dist' && dpkgArch="$(dpkg --p
   && node --version \
   && npm --version \
   && spc -V \
+  && mkdir -p "/home/runner/.npm" \
   # fix: publish firebase hosting
   && chown -R runner:runner "/home/runner/.npm"
 
