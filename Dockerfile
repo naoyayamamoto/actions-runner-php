@@ -1,12 +1,11 @@
-FROM summerwind/actions-runner:ubuntu-22.04
-
+FROM ghcr.io/actions/actions-runner
 # SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 ENV type full
 ENV CONTAINER shivammathur/node
 ENV DEBIAN_FRONTEND=noninteractive
-ENV NODE_VERSION 18.16.1
-ENV NODE_VERSION_x86 18.16.1
+ENV NODE_VERSION 18.17.1
+ENV NODE_VERSION_x86 18.17.1
 ENV YARN_VERSION 1.22.19
 ENV RUNNER_TOOL_PATH "/opt/hostedtoolcache"
 ENV RUNNER_TOOL_CACHE "/opt/hostedtoolcache"
