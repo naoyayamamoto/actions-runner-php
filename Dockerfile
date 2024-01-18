@@ -4,8 +4,8 @@ FROM ghcr.io/actions/actions-runner
 ENV type full
 ENV CONTAINER shivammathur/node
 ENV DEBIAN_FRONTEND=noninteractive
-ENV NODE_VERSION 18.17.1
-ENV NODE_VERSION_x86 18.17.1
+ENV NODE_VERSION 18.19.0
+ENV NODE_VERSION_x86 18.19.0
 ENV YARN_VERSION 1.22.19
 ENV RUNNER_TOOL_PATH "/opt/hostedtoolcache"
 ENV RUNNER_TOOL_CACHE "/opt/hostedtoolcache"
