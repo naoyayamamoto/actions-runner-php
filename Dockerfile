@@ -52,7 +52,6 @@ RUN ARCH= && MULTILIB= && PREFIX='www' && URLPATH='dist' && dpkgArch="$(dpkg --p
     | cut -d: -f1 \
     | sort -u \
     | xargs -r apt-mark manual \
-  && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
   && ln -s /usr/local/bin/node /usr/local/bin/nodejs \
   # smoke tests
   && node --version \
@@ -84,7 +83,6 @@ RUN set -ex \
     | cut -d: -f1 \
     | sort -u \
     | xargs -r apt-mark manual \
-  && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
   # smoke test
   && yarn --version
 
@@ -132,7 +130,6 @@ RUN if [ "$type" = "full" ]; then set -ex \
         | cut -d: -f1 \
         | sort -u \
         | xargs -r apt-mark manual \
-      && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
       # smoke test
       && gcc --version \
       && g++ --version \
