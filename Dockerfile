@@ -4,8 +4,8 @@ FROM ghcr.io/actions/actions-runner
 ENV type full
 ENV CONTAINER shivammathur/node
 ENV DEBIAN_FRONTEND=noninteractive
-ENV NODE_VERSION 18.19.0
-ENV NODE_VERSION_x86 18.19.0
+ENV NODE_VERSION 20.11.1
+ENV NODE_VERSION_x86 20.11.1
 ENV YARN_VERSION 1.22.19
 ENV RUNNER_TOOL_PATH "/opt/hostedtoolcache"
 ENV RUNNER_TOOL_CACHE "/opt/hostedtoolcache"
@@ -52,6 +52,7 @@ RUN ARCH= && MULTILIB= && PREFIX='www' && URLPATH='dist' && dpkgArch="$(dpkg --p
     | cut -d: -f1 \
     | sort -u \
     | xargs -r apt-mark manual \
+  && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
   && ln -s /usr/local/bin/node /usr/local/bin/nodejs \
   # smoke tests
   && node --version \
@@ -83,6 +84,7 @@ RUN set -ex \
     | cut -d: -f1 \
     | sort -u \
     | xargs -r apt-mark manual \
+  && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
   # smoke test
   && yarn --version
 
@@ -93,10 +95,11 @@ RUN if [ "$type" = "full" ]; then set -ex \
       && usermod -d /var/lib/mysql/ mysql \
       && add-apt-repository ppa:git-core/ppa -y \
       && LC_ALL=C.UTF-8 add-apt-repository ppa:ondrej/php \
+      && LC_ALL=C.UTF-8 add-apt-repository ppa:ondrej/apache2 \
       && apt-get remove software-properties-common -y \
       && apt-get update \
       && cp -r /etc/apt/sources.list.d /etc/apt/sources.list.d.save \
-      && for v in 5.6 7.0 7.1 7.2 7.3 7.4 8.0 8.1 8.2; do \
+      && for v in 5.6 7.0 7.1 7.2 7.3 7.4 8.0 8.1 8.2 8.3; do \
            apt-get install -y --no-install-recommends php"$v" \
            php"$v"-dev \
            php"$v"-curl \
@@ -105,7 +108,6 @@ RUN if [ "$type" = "full" ]; then set -ex \
            php"$v"-intl \
            php"$v"-mysql \
            php"$v"-pgsql \
-           php"$v"-xdebug \
            php"$v"-zip; \
          done \
       && curl -o /usr/bin/systemctl -sL https://raw.githubusercontent.com/shivammathur/node-docker/main/systemctl-shim \
@@ -114,6 +116,13 @@ RUN if [ "$type" = "full" ]; then set -ex \
       && curl -o /tmp/pear.phar -sL https://raw.githubusercontent.com/pear/pearweb_phars/master/install-pear-nozlib.phar \
       && php /tmp/pear.phar && rm -f /tmp/pear.phar \
       && apt-get install -y --no-install-recommends autoconf automake gcc g++ git \
+      && for v in 5.6 7.0 7.1 7.2 7.3 7.4 8.0 8.1 8.2 8.3; do \      
+           apt-get install -y --no-install-recommends php"$v"-xdebug 2>/dev/null || (spc -p "$v" -e xdebug-xdebug/xdebug@master -r verbose) \
+        && apt-get install -y --no-install-recommends php"$v"-imagick 2>/dev/null || (IMAGICK_LIBS=libmagickwand-dev spc -p "$v" -e imagick-imagick/imagick@master -r verbose); \
+      done \
+      && for tool in php phar phar.phar php-cgi php-config phpize phpdbg; do \
+           { [ -e /usr/bin/"$tool"8.3 ] && sudo update-alternatives --set $tool /usr/bin/"$tool"8.3 || true; } \
+         done \
       && rm -rf /var/lib/apt/lists/* \
       && { [ -z "$savedAptMark" ] || apt-mark manual $savedAptMark > /dev/null; } \
       && find /usr/local -type f -executable -exec ldd '{}' ';' \
@@ -123,6 +132,7 @@ RUN if [ "$type" = "full" ]; then set -ex \
         | cut -d: -f1 \
         | sort -u \
         | xargs -r apt-mark manual \
+      && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
       # smoke test
       && gcc --version \
       && g++ --version \
@@ -136,6 +146,7 @@ RUN if [ "$type" = "full" ]; then set -ex \
       && php8.0 -v \
       && php8.1 -v \
       && php8.2 -v \
+      && php8.3 -v \
       && php -v; \
     fi
 
