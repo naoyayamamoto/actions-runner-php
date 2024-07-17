@@ -4,9 +4,9 @@ FROM ghcr.io/actions/actions-runner
 ENV type full
 ENV CONTAINER shivammathur/node
 ENV DEBIAN_FRONTEND=noninteractive
-ENV NODE_VERSION 20.11.1
-ENV NODE_VERSION_x86 20.11.1
-ENV YARN_VERSION 1.22.19
+ENV NODE_VERSION 20.15.1
+ENV NODE_VERSION_x86 20.15.1
+ENV YARN_VERSION 1.22.22
 ENV RUNNER_TOOL_PATH "/opt/hostedtoolcache"
 ENV RUNNER_TOOL_CACHE "/opt/hostedtoolcache"
 ENV GITHUB_ENV "/tmp/set_env"
@@ -84,7 +84,9 @@ RUN set -ex \
     | sort -u \
     | xargs -r apt-mark manual \
   # smoke test
-  && yarn --version
+  && yarn --version \
+  # playwright dependencies
+  && npx playwright install --with-deps
 
 RUN if [ "$type" = "full" ]; then set -ex \
       && savedAptMark="$(apt-mark showmanual)" \
