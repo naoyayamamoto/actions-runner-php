@@ -84,9 +84,7 @@ RUN set -ex \
     | sort -u \
     | xargs -r apt-mark manual \
   # smoke test
-  && yarn --version \
-  # playwright dependencies
-  && npx playwright install --with-deps
+  && yarn --version
 
 RUN if [ "$type" = "full" ]; then set -ex \
       && savedAptMark="$(apt-mark showmanual)" \
